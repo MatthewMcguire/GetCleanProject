@@ -70,11 +70,18 @@ img {
 </div>
 <div id="dependencies" class="section level4">
 <h4><strong>Dependencies</strong></h4>
-<p>This script assumes that the dplyr library is available to load. It also expects the following data files to be available in the working directory: * X_test.txt * X_train.txt * features.txt * subject_test.txt * subject_train.txt * activity_labels.txt</p>
+<p>This script assumes that the dplyr library is available to load. It also expects the following data files to be available in the working directory: * X_test.txt * X_train.txt * y_test.txt * y_train.txt * features.txt * subject_test.txt * subject_train.txt * activity_labels.txt</p>
 </div>
 <div id="logic" class="section level4">
 <h4><strong>Logic</strong></h4>
 <p>The script is divided into five parts, following the logic described in the project instructions.</p>
+<p><strong>Part One:</strong> The first part simply loads the train and test data frames and merges them into a third, complete data frame named <em>x</em>. They are merged with a simple <em>rbind</em>, and then the (very large) component data frames are removed from memory!</p>
+<p><strong>Part Two:</strong> In the second part, the data is culled and labelled. The subject and activity data columnns (from the subject and y files, respectively) are read and added to the main <em>x</em> data frame. The script also removes all columns that do not refer to a <em>mean</em> or a <em>standard deviation</em>. First, a logical vector is created that is TRUE only for columns with ‘mean’ or ‘std’ in the name. Then, the data frame is reduced to only the columns marked TRUE in this vector.</p>
+<pre class="r"><code>isStandDev_or_Mean &lt;- grepl( &quot;mean|std&quot;, featureNames, ignore.case = TRUE)
+x &lt;- x[,featureNames[isStandDev_or_Mean]]</code></pre>
+<p><strong>Part Three:</strong> The activity labels are read from their file, and every numeric code in the Activity column of the main data frame is changed to the actual word, e.g. WALKING.</p>
+<p><strong>Part Four:</strong> The <em>features.txt</em> file contains the names of the data columns. These are maintained as the descriptive variable names, despite their rather technical and abbreviated nature. There are 86 of them, and it would require some domain knowledge to transform them into something more understandable.</p>
+<p><strong>Part Five:</strong> Finally, the 10299 observations of the main data frame are summarized by taking the mean of each column, and placing these means into a new, summary data frame. This is done many times, by breaking down the observations by Activity name and by Subject number. The project does not specify exactly how far this grouping must be extended, so I have done it in two ways: on one hand, each Subject is grouped by Activity and each Activity is also grouped by Subject. And on the other, the observations are also grouped by Activity and <em>all</em> Subjects, as well as by Subject and <em>all</em> Activities. The identiy of the various combinations is made clear in the first two columns: <strong>Subject</strong> and <strong>Activity</strong>. The result is then written to a space-delimited text file named “smallSummary.txt”.</p>
 </div>
 </div>
 
