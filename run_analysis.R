@@ -24,7 +24,7 @@ colnames(x) <- featureNames
 # identify which features are mean and std. dv.
 isStandDev_or_Mean <- grepl( "mean|std", featureNames, ignore.case = TRUE)
 
-# remove the data frame coumns not referring to mean or std
+# remove the data frame columns not referring to mean or std
 x <- x[,featureNames[isStandDev_or_Mean]]
 
 # load train and test Y data 
